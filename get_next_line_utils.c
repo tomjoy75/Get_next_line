@@ -6,7 +6,7 @@
 /*   By: tjoyeux <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 23:29:59 by tjoyeux           #+#    #+#             */
-/*   Updated: 2023/12/12 18:18:00 by tjoyeux          ###   ########.fr       */
+/*   Updated: 2023/12/13 00:12:39 by tjoyeux          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	*add_to_buffer(char *basin, char *add)
 	int	i;
 	int	j;
 
-	tmp_str = calloc(ft_strlen(basin) + BUFFER_SIZE + 1, sizeof(char));
+	tmp_str = ft_calloc(ft_strlen(basin) + BUFFER_SIZE + 1, sizeof(char));
 	if (!tmp_str)
 		return (NULL);
 	i = 0;
@@ -101,7 +101,6 @@ void	*add_to_buffer(char *basin, char *add)
 	free (add);
 	return (tmp_str);
 }
-
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*s3;
@@ -137,7 +136,7 @@ char	*extract_line(char **stash)
 	int	j;
 
 	i = 0;
-	line = calloc(ft_strlen(*stash) + 1, sizeof(char));
+	line = ft_calloc(ft_strlen(*stash) + 1, sizeof(char));
 	if (!line)
 		return (NULL);
 	while ((*stash)[i] != '\n' && (*stash)[i])
@@ -148,9 +147,9 @@ char	*extract_line(char **stash)
 	line[i] = (*stash)[i];
 	i++;
 	j = 0;
-	temp = calloc(ft_strlen((*stash) + i), sizeof(char));
-	if (!line)
-		return (NULL);
+	temp = ft_calloc(ft_strlen((*stash) - i), sizeof(char));
+	if (!temp)
+		return (line);
 	while ((*stash)[i + j])
 	{
 		temp[j] = (*stash)[i + j];
