@@ -6,7 +6,7 @@
 /*   By: tjoyeux <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:55:20 by tjoyeux           #+#    #+#             */
-/*   Updated: 2023/12/08 15:27:11 by tjoyeux          ###   ########.fr       */
+/*   Updated: 2023/12/12 17:48:11 by tjoyeux          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,10 @@
 
 char	*get_next_line(int fd);
 void	*ft_calloc(size_t nmemb, size_t size);
+char	*ft_strchr(const char *s, int c);
+size_t	ft_strlen(const char *s);
+void	*add_to_buffer(char *basin, char *add);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	*extract_line(char **stash);
 
 #endif

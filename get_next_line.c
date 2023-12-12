@@ -6,35 +6,55 @@
 /*   By: tjoyeux <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:59:18 by tjoyeux           #+#    #+#             */
-/*   Updated: 2023/12/08 15:29:53 by tjoyeux          ###   ########.fr       */
+/*   Updated: 2023/12/12 18:38:43 by tjoyeux          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 
-static char	*read_from_fd(int fd)
+// Cette fonction met a jour le cup_buffer apres appel a read et renvoie la taille prise
+static int	read_from_fd(int fd, char **cup_buffer)
 {
 	int			bytes_read;
-	char		*cup_buffer;
-	static int	count = 1;
 
-	printf("ft_calloc#[%d]---", count++);
-	cup_buffer = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-	if (NULL == cup_buffer)
-		return (NULL);
-	bytes_read = read(fd, cup_buffer, BUFFER_SIZE);
+	*cup_buffer = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+// CHECKER CETTE CONDITION
+//	if (NULL == cup_buffer)
+//		return (NULL);
+	bytes_read = read(fd, *cup_buffer, BUFFER_SIZE);
 	if (0 >= bytes_read)
-		return (free(cup_buffer), NULL);
-	return (cup_buffer);
+		free(*cup_buffer);
+	return (bytes_read);
 }
 
 char	*get_next_line(int fd)
 {
-	char	*basin_buffer;
+	static char	*basin_buffer;
+	char		*cup_buffer;
+	char		*tmp;
+	char		*line;
+	int		l;
 
-	basin_buffer = read_from_fd(fd);
-	return (basin_buffer);
+	if (BUFFER_SIZE <= 0 || fd <= 0)
+		return (NULL);
+	if (!basin_buffer)
+		basin_buffer = ft_calloc(1, sizeof(char));
+	while (!ft_strchr(basin_buffer, '\n'))
+	{
+		l = read_from_fd(fd, &cup_buffer);
+		if (!l)
+			return(free(basin_buffer), NULL);
+		tmp = ft_strjoin(basin_buffer, cup_buffer);
+		free (cup_buffer);
+		free (basin_buffer);
+		basin_buffer = tmp;
+	}
+	printf("stash before : %s\n", basin_buffer);
+	line = extract_line(&basin_buffer);
+	printf("stash after : %s\n", basin_buffer);
+
+	return (line);
 }
 
 #include <fcntl.h>
@@ -45,7 +65,7 @@ int	main(void)
 	int	count;
 
 	count = 0;
-	fd = open("example.txt", O_RDONLY);
+	fd = open("hello.txt", O_RDONLY);
 	if (0 >= fd)
 		return (1);
 	while (1)
