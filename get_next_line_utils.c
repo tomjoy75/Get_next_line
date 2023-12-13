@@ -6,7 +6,7 @@
 /*   By: tjoyeux <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 23:29:59 by tjoyeux           #+#    #+#             */
-/*   Updated: 2023/12/13 00:23:33 by tjoyeux          ###   ########.fr       */
+/*   Updated: 2023/12/13 13:26:27 by tjoyeux          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ char	*ft_strchr(const char *s, int c)
 	size_t	i;
 
 	i = 0;
+	test_ptr((char *)s);
 	while (s[i])
 	{
 		if (s[i] == c % 256)
@@ -75,7 +76,7 @@ char	*ft_strchr(const char *s, int c)
 	else
 		return (NULL);
 }
-
+/*
 void	*add_to_buffer(char *basin, char *add)
 {
 	char	*tmp_str;
@@ -100,24 +101,25 @@ void	*add_to_buffer(char *basin, char *add)
 	free (basin);
 	free (add);
 	return (tmp_str);
-}
-char	*ft_strjoin(char const *s1, char const *s2)
+}*/
+char	*ft_strjoin(char **s1, char const *s2)
 {
 	char	*s3;
 	int		i;
 	int		j;
 
-	if (!s1 || !s2)
+	if (!(*s1) || !s2)
 		return (NULL);
-	s3 = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	s3 = ft_calloc(ft_strlen(*s1) + ft_strlen(s2) + 1, sizeof(char));
 	if (!s3)
 		return (NULL);
 	i = 0;
-	while (s1[i])
+	while ((*s1)[i])
 	{
-		s3[i] = s1[i];
+		s3[i] = (*s1)[i];
 		i++;
 	}
+	free(*s1);
 	j = 0;
 	while (s2[j])
 	{
@@ -159,4 +161,9 @@ char	*extract_line(char **stash)
 	*stash = temp;
 	//free (temp);
 	return (line);
+}
+
+void	test_ptr(char *s)
+{
+	printf("\nAdresse : %p\nContenu : %s\n", s, s);
 }

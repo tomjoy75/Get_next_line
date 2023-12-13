@@ -6,12 +6,11 @@
 /*   By: tjoyeux <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:59:18 by tjoyeux           #+#    #+#             */
-/*   Updated: 2023/12/13 00:00:28 by tjoyeux          ###   ########.fr       */
+/*   Updated: 2023/12/13 13:23:23 by tjoyeux          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 // Cette fonction met a jour le cup_buffer apres appel a read et renvoie la taille prise
 static int	read_from_fd(int fd, char **cup_buffer)
@@ -30,29 +29,34 @@ static int	read_from_fd(int fd, char **cup_buffer)
 
 char	*get_next_line(int fd)
 {
-	static char	*basin_buffer;
+	static char	*basin_buffer = NULL;
 	char		*cup_buffer;
-	char		*tmp;
+//	char		*tmp;
 	char		*line;
 	int		l;
 
 	if (BUFFER_SIZE <= 0 || fd <= 0)
 		return (NULL);
-	if (!basin_buffer)
-		basin_buffer = ft_calloc(1, sizeof(char));
-	while (!ft_strchr(basin_buffer, '\n'))
+//	if (!basin_buffer)
+//		basin_buffer = ft_calloc(1, sizeof(char));
+	while (!basin_buffer || !ft_strchr(basin_buffer, '\n'))
 	{
 		l = read_from_fd(fd, &cup_buffer);
 		if (!l)
 			return(free(basin_buffer), NULL);
-		tmp = ft_strjoin(basin_buffer, cup_buffer);
-		free (cup_buffer);
-		free (basin_buffer);
-		basin_buffer = tmp;
+		if (!basin_buffer)
+			basin_buffer = cup_buffer;
+		else
+		{
+			basin_buffer = ft_strjoin(&basin_buffer, cup_buffer);
+			free (cup_buffer);
+		}
+//		free (basin_buffer);
+//		basin_buffer = tmp;
 	}
-	printf("stash before : %s\n", basin_buffer);
+//	printf("stash before : %s\n", basin_buffer);
 	line = extract_line(&basin_buffer);
-	printf("stash after : %s\n", basin_buffer);
+//	printf("stash after : %s\n", basin_buffer);
 
 	return (line);
 }
