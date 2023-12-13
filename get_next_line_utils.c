@@ -6,7 +6,7 @@
 /*   By: tjoyeux <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 23:29:59 by tjoyeux           #+#    #+#             */
-/*   Updated: 2023/12/13 18:41:24 by tjoyeux          ###   ########.fr       */
+/*   Updated: 2023/12/13 23:50:16 by tjoyeux          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	ft_bzero(ptr, nmemb * size);
 	return (ptr);
 }
+
 char	*ft_strdup(const char *s)
 {
 	char	*str;
@@ -81,7 +82,6 @@ char	*ft_strchr(const char *s, int c)
 	size_t	i;
 
 	i = 0;
-//	test_ptr((char *)s);
 	while (s[i])
 	{
 		if (s[i] == c % 256)
@@ -93,6 +93,7 @@ char	*ft_strchr(const char *s, int c)
 	else
 		return (NULL);
 }
+
 /*
 void	*add_to_buffer(char *basin, char *add)
 {
@@ -119,33 +120,6 @@ void	*add_to_buffer(char *basin, char *add)
 	free (add);
 	return (tmp_str);
 }*/
-char	*ft_strjoin(char **s1, char const *s2)
-{
-	char	*s3;
-	int		i;
-	int		j;
-
-	if (!(*s1) || !s2)
-		return (NULL);
-	s3 = ft_calloc(ft_strlen(*s1) + ft_strlen(s2) + 1, sizeof(char));
-	if (!s3)
-		return (NULL);
-	i = 0;
-	while ((*s1)[i])
-	{
-		s3[i] = (*s1)[i];
-		i++;
-	}
-	free(*s1);
-	j = 0;
-	while (s2[j])
-	{
-		s3[i + j] = s2[j];
-		j++;
-	}
-	s3[i + j] = '\0';
-	return (s3);
-}
 /*
 char	*extract_line(char **stash)
 {
@@ -180,35 +154,8 @@ char	*extract_line(char **stash)
 	return (line);
 }*/
 
-char	*extract_line(char **stash)
-{
-	char	*line;
-	char	*remainder;
-	char	*new_stash;
-	int	i;
-	
-	remainder = ft_strchr(*stash, '\n');
-	if (!remainder)
-	{
-		line = *stash;
-		*stash = NULL;
-		return (line);
-	}
-	remainder++;
-	line = ft_calloc((remainder - *stash + 1), sizeof(char)); 
-	i = 0;
-	while ((*stash + i) < remainder)
-	{
-		line[i] = (*stash)[i]; 
-		i++;
-	}
-	new_stash = ft_strdup(remainder);
-	free(*stash);
-	*stash = new_stash;
-	return (line);
-}
-
+/*
 void	test_ptr(char *s)
 {
 	printf("\nAdresse : %p\nContenu : %s\n", s, s);
-}
+}*/
