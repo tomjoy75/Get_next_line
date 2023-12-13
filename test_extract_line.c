@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   test_extract_line.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjoyeux <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/07 23:29:59 by tjoyeux           #+#    #+#             */
-/*   Updated: 2023/12/13 18:41:24 by tjoyeux          ###   ########.fr       */
+/*   Created: 2023/12/13 16:53:24 by tjoyeux           #+#    #+#             */
+/*   Updated: 2023/12/13 18:35:59 by tjoyeux          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include <stdio.h>
+#include <stdlib.h>
 #define INT_MAX 2147483647
 
 size_t	ft_strlen(const char *s)
@@ -58,6 +59,7 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	ft_bzero(ptr, nmemb * size);
 	return (ptr);
 }
+
 char	*ft_strdup(const char *s)
 {
 	char	*str;
@@ -81,7 +83,6 @@ char	*ft_strchr(const char *s, int c)
 	size_t	i;
 
 	i = 0;
-//	test_ptr((char *)s);
 	while (s[i])
 	{
 		if (s[i] == c % 256)
@@ -93,92 +94,6 @@ char	*ft_strchr(const char *s, int c)
 	else
 		return (NULL);
 }
-/*
-void	*add_to_buffer(char *basin, char *add)
-{
-	char	*tmp_str;
-	int	i;
-	int	j;
-
-	tmp_str = ft_calloc(ft_strlen(basin) + BUFFER_SIZE + 1, sizeof(char));
-	if (!tmp_str)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (basin[i])
-	{
-		tmp_str[i] = basin[i];
-		i++;
-	}
-	while (add[j])
-	{
-		tmp_str[i + j] = add[j];
-		j++;
-	}
-	free (basin);
-	free (add);
-	return (tmp_str);
-}*/
-char	*ft_strjoin(char **s1, char const *s2)
-{
-	char	*s3;
-	int		i;
-	int		j;
-
-	if (!(*s1) || !s2)
-		return (NULL);
-	s3 = ft_calloc(ft_strlen(*s1) + ft_strlen(s2) + 1, sizeof(char));
-	if (!s3)
-		return (NULL);
-	i = 0;
-	while ((*s1)[i])
-	{
-		s3[i] = (*s1)[i];
-		i++;
-	}
-	free(*s1);
-	j = 0;
-	while (s2[j])
-	{
-		s3[i + j] = s2[j];
-		j++;
-	}
-	s3[i + j] = '\0';
-	return (s3);
-}
-/*
-char	*extract_line(char **stash)
-{
-	char	*line;
-	char	*temp;
-	int	i;
-	int	j;
-
-	i = 0;
-	line = ft_calloc(ft_strlen(*stash) + 1, sizeof(char));
-	if (!line)
-		return (NULL);
-	while ((*stash)[i] != '\n' && (*stash)[i])
-	{
-		line[i] = (*stash)[i];
-		i++;
-	}
-	line[i] = (*stash)[i];
-	i++;
-	j = 0;
-	temp = ft_calloc(ft_strlen(*stash) - i, sizeof(char));
-	if (!temp)
-		return (line);
-	while ((*stash)[i + j])
-	{
-		temp[j] = (*stash)[i + j];
-		j++;
-	}
-	free(*stash);
-	*stash = temp;
-	//free (temp);
-	return (line);
-}*/
 
 char	*extract_line(char **stash)
 {
@@ -207,8 +122,19 @@ char	*extract_line(char **stash)
 	*stash = new_stash;
 	return (line);
 }
-
-void	test_ptr(char *s)
+/*
+int	main(void)
 {
-	printf("\nAdresse : %p\nContenu : %s\n", s, s);
-}
+	char	*stash;
+	char	*line;
+
+//	stash = ft_strdup("AAA\nBBB");
+	stash = ft_strdup("AAA\nBBB\nCCC");
+//	stash = ft_strdup("AAABBB");
+
+	line = extract_line(&stash);
+	printf("line : %s\n", line);
+	printf("stash : %s\n", stash);
+	free(line);
+	free(stash);
+}*/

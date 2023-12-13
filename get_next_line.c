@@ -6,7 +6,7 @@
 /*   By: tjoyeux <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:59:18 by tjoyeux           #+#    #+#             */
-/*   Updated: 2023/12/13 13:23:23 by tjoyeux          ###   ########.fr       */
+/*   Updated: 2023/12/13 19:09:06 by tjoyeux          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*get_next_line(int fd)
 
 	return (line);
 }
-
+/*
 #include <fcntl.h>
 int	main(void)
 {
@@ -69,7 +69,7 @@ int	main(void)
 	int	count;
 
 	count = 0;
-	fd = open("hello.txt", O_RDONLY);
+	fd = open("example.txt", O_RDONLY);
 	if (0 >= fd)
 		return (1);
 	while (1)
@@ -83,4 +83,4 @@ int	main(void)
 	}
 	close(fd);
 	return (0);
-}
+}*/
