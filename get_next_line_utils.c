@@ -6,7 +6,7 @@
 /*   By: tjoyeux <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 23:29:59 by tjoyeux           #+#    #+#             */
-/*   Updated: 2023/12/13 00:12:39 by tjoyeux          ###   ########.fr       */
+/*   Updated: 2023/12/13 00:23:33 by tjoyeux          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ char	*extract_line(char **stash)
 	line[i] = (*stash)[i];
 	i++;
 	j = 0;
-	temp = ft_calloc(ft_strlen((*stash) - i), sizeof(char));
+	temp = ft_calloc(ft_strlen(*stash) - i, sizeof(char));
 	if (!temp)
 		return (line);
 	while ((*stash)[i + j])
