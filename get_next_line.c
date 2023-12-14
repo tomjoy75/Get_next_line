@@ -6,7 +6,7 @@
 /*   By: tjoyeux <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:59:18 by tjoyeux           #+#    #+#             */
-/*   Updated: 2023/12/13 23:52:53 by tjoyeux          ###   ########.fr       */
+/*   Updated: 2023/12/14 15:23:05 by tjoyeux          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,17 @@ char	*get_next_line(int fd)
 	while (!basin_buffer || !ft_strchr(basin_buffer, '\n'))
 	{
 		l = read_from_fd(fd, &cup_buffer);
-		if (l <= 0)
+		if (l < 0)
 			return (free(basin_buffer), NULL);
-		if (!basin_buffer)
+		else if (l == 0)
+//			break;
+		{
+			line = ft_strdup(basin_buffer);
+			free(basin_buffer);
+			return (line);
+		}
+//			return (basin_buffer);
+		else  if (!basin_buffer)
 			basin_buffer = cup_buffer;
 		else
 		{
@@ -106,16 +114,16 @@ char	*get_next_line(int fd)
 	line = extract_line(&basin_buffer);
 	return (line);
 }
-/*
+
 #include <fcntl.h>
-int	main(void)
+int	main(int argc, char **argv)
 {
 	int	fd;
 	char	*next_line;
 	int	count;
 
 	count = 0;
-	fd = open("example.txt", O_RDONLY);
+	fd = open(argv[1], O_RDONLY);
 	if (0 >= fd)
 		return (1);
 	while (1)
@@ -129,4 +137,4 @@ int	main(void)
 	}
 	close(fd);
 	return (0);
-}*/
+}

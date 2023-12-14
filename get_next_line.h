@@ -6,7 +6,7 @@
 /*   By: tjoyeux <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:55:20 by tjoyeux           #+#    #+#             */
-/*   Updated: 2023/12/13 23:54:19 by tjoyeux          ###   ########.fr       */
+/*   Updated: 2023/12/14 11:06:41 by tjoyeux          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define GET_NEXT_LINE_H
 # include <stdlib.h>
 # include <unistd.h>
-//# include <stdio.h>
+# include <stdio.h>
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 3
 # endif
