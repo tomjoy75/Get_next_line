@@ -1,32 +1,96 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   gnl_complete.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjoyeux <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 12:58:06 by tjoyeux           #+#    #+#             */
-/*   Updated: 2023/12/18 00:08:58 by tjoyeux          ###   ########.fr       */
+/*   Updated: 2023/12/17 12:51:46 by tjoyeux          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#define BUFFER_SIZE 5 
 
-int	read_and_add_to_stash(int fd, char **stash, char **cup_buffer)
+size_t	ft_strlen(const char *s)
 {
-	int	bytes_read;
+	size_t	i;
 
-	bytes_read = read(fd, *cup_buffer, BUFFER_SIZE);
-	if (bytes_read < 0)
-		return (free(*stash), free(*cup_buffer), -1);
-	(*cup_buffer)[bytes_read] = '\0';
-	*stash = ft_strjoin(stash, *cup_buffer);
-	if (!(*stash))
-		return (free(*stash), free(*cup_buffer), -1);
-	return (bytes_read);
+	i = 0;
+	while (s[i])
+	{
+		i++;
+	}
+	return (i);
 }
 
-char	*fill_stash(int fd, char **stash)
+char	*ft_strdup(const char *s)
+{
+	char	*str;
+	int		i;
+
+	str = malloc(sizeof(char) * (ft_strlen(s) + 1));
+	if (!str)
+		return (NULL);
+	i = 0;
+	while (s[i])
+	{
+		str[i] = s[i];
+		i++;
+	}
+	str[i] = '\0';
+	return (str);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	size_t	i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == c % 256)
+			return ((char *)s + i);
+		i++;
+	}
+	if (c == '\0')
+		return ((char *)s + i);
+	else
+		return (NULL);
+}
+
+char	*ft_strjoin(char **s1, char const *s2)
+{
+	char	*s3;
+	int		i;
+	int		j;
+
+	if (!(*s1) || !s2)
+		return (NULL);
+	s3 = malloc((ft_strlen(*s1) + ft_strlen(s2) + 1) * sizeof(char));
+	if (!s3)
+		return (NULL);
+	i = 0;
+	while ((*s1)[i])
+	{
+		s3[i] = (*s1)[i];
+		i++;
+	}
+	free(*s1);
+	j = 0;
+	while (s2[j])
+	{
+		s3[i + j] = s2[j];
+		j++;
+	}
+	s3[i + j] = '\0';
+	return (s3);
+}
+
+char	*read_from_fd(int fd, char **stash)
 {
 	char	*cup_buffer;
 	int		bytes_read;
@@ -36,30 +100,23 @@ char	*fill_stash(int fd, char **stash)
 	cup_buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!cup_buffer)
 		return (free(stash), NULL);
-	bytes_read = read_and_add_to_stash(fd, stash, &cup_buffer);
-	if (bytes_read == -1)
-		return (NULL);
+	bytes_read = read(fd, cup_buffer, BUFFER_SIZE);
 	if ((*stash)[0] == '\0' && !bytes_read)
 		return (free(*stash), free(cup_buffer), NULL);
-	while (bytes_read > 0 && !ft_strchr(*stash, '\n'))
+	if (bytes_read < 0)
+		return (free(*stash), free(cup_buffer), NULL);
+	cup_buffer[bytes_read] = '\0';
+	while (bytes_read > 0)
 	{
-		bytes_read = read_and_add_to_stash(fd, stash, &cup_buffer);
-		if (bytes_read == -1)
-			return (NULL);
+		*stash = ft_strjoin(stash, cup_buffer);
+		if (!(*stash))
+			return (free(*stash), free(cup_buffer), NULL);
+		bytes_read = read(fd, cup_buffer, BUFFER_SIZE);
+		if (bytes_read < 0)
+			return (free(*stash), free(cup_buffer), NULL);
+		cup_buffer[bytes_read] = '\0';
 	}
 	return (free(cup_buffer), *stash);
-}
-
-char	*end_of_file(char **stash)
-{
-	char	*line;
-
-	line = ft_strdup(*stash);
-	free(*stash);
-	*stash = NULL;
-	if (!line)
-		return (NULL);
-	return (line);
 }
 
 char	*extract_line(char **stash)
@@ -67,11 +124,18 @@ char	*extract_line(char **stash)
 	char	*line;
 	char	*remainder;
 	char	*new_stash;
-	int		i;
-
+	int	i;
+	
 	remainder = ft_strchr(*stash, '\n');
 	if (!remainder)
-		return (end_of_file(stash));
+	{
+		line = ft_strdup(*stash);
+		free(*stash);
+		*stash = NULL;
+		if (!line)
+			return (NULL);
+		return (line);
+	}
 	remainder++;
 	line = malloc((remainder - *stash + 1) * sizeof(char)); 
 	if (!line)
@@ -94,19 +158,20 @@ char	*get_next_line(int fd)
 	static char	*stash;
 	char		*line;
 
-	if (fd < 0 || read(fd, NULL, 0) < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
-	stash = fill_stash(fd, &stash);
+	// Cas de bases
+
+	// Creer stash
+	stash = read_from_fd(fd, &stash);
 	if (!stash)
 		return (NULL);
+	// Extract stash
 	line = extract_line(&stash);
 	if (!line)
 		return (NULL);
 	return (line);
 }
-/*
+
 #include <fcntl.h>
-#include <stdio.h>
 int	main(int argc, char **argv)
 {
 	int	fd;
@@ -130,4 +195,4 @@ int	main(int argc, char **argv)
 	}
 	close(fd);
 	return (0);
-}*/
+}

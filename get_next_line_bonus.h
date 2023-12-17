@@ -1,21 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjoyeux <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:55:20 by tjoyeux           #+#    #+#             */
-/*   Updated: 2023/12/18 00:08:34 by tjoyeux          ###   ########.fr       */
+/*   Updated: 2023/12/18 00:29:34 by tjoyeux          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 # include <stdlib.h>
 # include <unistd.h>
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 5
+# endif
+# ifndef MAX_FD
+#  define MAX_FD 1024
 # endif
 
 char	*get_next_line(int fd);
